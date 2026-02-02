@@ -1,11 +1,11 @@
 
-// my-photon-build/crate/scaleFromUr/worker.js
+// worker.js
 
-// 1. 从同一目录的 wasm 包中导入 init 和所需的函数
-import init, { PhotonImage, resize } from './photon_rs.js';
+// 1. 从 wasm 包中导入 init 和所需的函数
+import init, { PhotonImage, resize_object_fit ,SamplingFilter, ScalingMode} from '../scaleFromUr/photon_rs.js';
 
 // 2. 导入 wasm 模块以传递给 init
-import wasmModule from './photon_rs_bg.wasm';
+import wasmModule from '../scaleFromUr/photon_rs_bg.wasm';
 
 // 在全局作用域中初始化 Wasm 模块。
 // 在 fetch 处理程序中等待此 promise，以确保模块已准备就绪。
@@ -42,7 +42,7 @@ export default {
       // 调整图片大小。第4个参数是采样滤波器。
       // 1 = Nearest, 2 = Triangle, 3 = CatmullRom, 4 = Gaussian, 5 = Lanczos3
       // 我们使用 Triangle 作为默认值，效果很好。
-      const resizedImage = resize(photonImage, width, height, 2);
+      const resizedImage = resize_object_fit(photonImage, width, height, SamplingFilter.Lanczos3, ScalingMode.Cover);
 
       // 获取调整大小后的图片的 JPEG 字节。
       const outputBytes = resizedImage.get_bytes_jpeg(90);
