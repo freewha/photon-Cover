@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@cf-wasm/photon": "^0.3.4",
+    "express": "^5.2.1"
+  }
+}
