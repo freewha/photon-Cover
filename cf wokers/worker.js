@@ -2,19 +2,18 @@
 // worker.js
 
 // 1. 从 wasm 包中导入 init 和所需的函数
-import init, { PhotonImage, resize_object_fit ,SamplingFilter, ScalingMode} from '../scaleFromUr/photon_rs.js';
+import  {initSync , PhotonImage, resize_object_fit ,SamplingFilter, ScalingMode} from '../scaleFromUr/photon_rs.js';
 
 // 2. 导入 wasm 模块以传递给 init
 import wasmModule from '../scaleFromUr/photon_rs_bg.wasm';
 
 // 在全局作用域中初始化 Wasm 模块。
 // 在 fetch 处理程序中等待此 promise，以确保模块已准备就绪。
-const initPromise = init(wasmModule);
-
+initSync({ module: wasmModule });
 export default {
   async fetch(request, env, ctx) {
     // 等待 wasm 模块初始化完成。
-    await initPromise;
+
 
     const url = new URL(request.url);
     const imageUrl = url.searchParams.get('imageUrl');
